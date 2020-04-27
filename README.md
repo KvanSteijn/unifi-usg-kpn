@@ -46,9 +46,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 ```
 
 ## Hardware
-* [Ubiquity Unifi Security Gateway](https://www.ubnt.com/unifi-routing/usg/) - Enterprise Gateway Router with Gigabit Ethernet - model: USG
-* [Ubiquity Unifi AP AC LR](https://www.ubnt.com/unifi/unifi-ap-ac-lr/) - 802.11ac Long Range Access Point - model: UAP‑AC‑LR.
-* [Ubiquity Unifi AP AC Pro](https://www.ubnt.com/unifi/unifi-ap-ac-pro/) - 802.11ac PRO Access Point - model: UAP‑AC‑PRO.y Managed Gigabit Switch - model: US‑8‑60W
+* [Ubiquity Unifi Security Gateway](https://www.ui.com/unifi-routing/unifi-security-gateway-pro-4/) - Enterprise Gateway Router with Gigabit Ethernet - model: USG‑PRO‑4
 * [Ubiquity Unifi Controller](https://www.ubnt.com/software/) - Centralized management software for the Ubiquity Unifi family (running on a virtual machine in the cloud).
 
 ## Further notes:
