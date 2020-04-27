@@ -2,7 +2,17 @@
         "interfaces": {
                 "ethernet": {
                         "eth0": {
-                                "description": "eth0 - FTTH",
+                                "disable": "''",
+                                "duplex": "auto",
+                                "speed": "auto"
+                        },
+                        "eth1": {
+                                "disable": "''",
+                                "duplex": "auto",
+                                "speed": "auto"
+                        },
+                        "eth2": {
+                                "description": "eth2 - FTTH",
                                 "duplex": "auto",
                                 "speed": "auto",
                                 "vif": {
@@ -10,7 +20,7 @@
                                                 "address": [
                                                     "dhcp"
                                                 ],
-                                                "description": "eth0.4 - IPTV",
+                                                "description": "eth2.4 - IPTV",
                                                 "dhcp-options": {
                                                         "client-option": [
                                                                 "send vendor-class-identifier &quot;IPTV_RG&quot;;",
@@ -19,13 +29,13 @@
                                                         "default-route": "no-update",
                                                         "default-route-distance": "210",
                                                         "name-server": "update"
-                                                }
-                                                ,"ip": {
+                                                },
+                                                "ip": {
                                                         "source-validation": "loose"
                                                     }
                                         },
                                         "6": {
-                                                "description": "eth0.6 - Internet",
+                                                "description": "eth2.6 - Internet",
                                                 "firewall": {
                                                         "in": {
                                                                 "name": "WAN_IN"
@@ -60,8 +70,8 @@
                                         }
                                 }
                         },
-                        "eth1": {
-                                "description": "eth1 - LAN",
+                        "eth3": {
+                                "description": "eth3 - LAN",
                                 "address": [
                                         "192.168.100.1/24"
                                 ],
@@ -78,11 +88,6 @@
                                         }
                                 },
                                 "speed": "auto"
-                        },
-                        "eth2": {
-                                "disable": "''",
-                                "duplex": "auto",
-                                "speed": "auto"
                         }
                 },
                 "loopback": {
@@ -93,18 +98,18 @@
                 "igmp-proxy": {
                     "disable-quickleave": "''",
                     "interface": {
-                        "eth0": {
+                        "eth2": {
                           "role": "disabled",
                           "threshold": "1"
                         },
-                        "eth0.4": {
+                        "eth2.4": {
                             "alt-subnet": [
                                 "0.0.0.0/0"
                             ],
                             "role": "upstream",
                             "threshold": "1"
                         },
-                        "eth1": {
+                        "eth3": {
                           "alt-subnet": [
                               "0.0.0.0/0"
                           ],
@@ -140,7 +145,7 @@
                 "auto-firewall": "enable",
                 "hairpin-nat": "enable",
                 "lan-interface": [
-                        "eth1"
+                        "eth3"
                 ],
                 "wan-interface": "pppoe2"
         },
@@ -165,7 +170,7 @@
                                                 "address": "213.75.112.0/21"
                                         },
                                         "log": "disable",
-                                        "outbound-interface": "eth0.4",
+                                        "outbound-interface": "eth2.4",
                                         "protocol": "all",
                                         "type": "masquerade"
                               },
