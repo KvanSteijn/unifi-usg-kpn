@@ -78,12 +78,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 
 All done, you should now have Internet in your LAN.
 
-### 2. Adopt Ubiquity Unifi Security Gateway Pro 4
-1. `SSH` into the **USG**
-2. Run this command with your **own** Unifi Controller IP address: ``set-inform http://{IP_ADRESS}:8080/inform`
-3. Adopt Unifi Security Gateway Pro 4 in your controller.
-
-### 3. Auto update IPTV route automatically
+### 2. Auto update IPTV route automatically
 The routed IP network sometimes changes, therefore the next-hop settings for routing should periodically change
 
 1. Pull the `update_iptv_route.sh` from the repo
@@ -92,7 +87,11 @@ The routed IP network sometimes changes, therefore the next-hop settings for rou
 4. `SSH` into the **USG**
 5. Move the file: `mv update_iptv_route.sh /config/scripts/post-config.d/`
 6. Make the file executable `chmod +x /config/scripts/post-config.d/update_iptv_route.sh`
-7. Execute the script ./update_iptv_route.sh
+
+### 3. Adopt Ubiquity Unifi Security Gateway Pro 4
+1. `SSH` into the **USG**
+2. Run this command with your **own** Unifi Controller IP address: `set-inform http://{IP_ADRESS}:8080/inform`
+3. Adopt Unifi Security Gateway Pro 4 in your controller.
 
 ### 4. Create new LAN network in Unifi Controller
 1. Go to `Settings`.
