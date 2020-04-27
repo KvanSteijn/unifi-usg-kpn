@@ -12,7 +12,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 * **Automated updates**: Automate the updates of the routing as the IPTV network changes.
 * **Custom IP Range**: Keep the internal networking ranges as they were (192.168.100.1/24).
 
-## Global design
+## Global design after the installation
 ```
         fiber
           |
@@ -20,15 +20,15 @@ There are a lot of useful posts out there, this one is a composition of those ar
     | FTTH NTU |
     +----------+
           |
-      vlan4 - iptv
-      vlan6 - internet
-      vlan7 - voip (not used in this setup)
+      VLAN4 - iptv
+      VLAN6 - internet
+      VLAN7 - voip (not used in this setup)
           |
      +-----------+
      | USG‑PRO‑4 |   - Ubiquity Unifi Security Gateway Pro 4
      +-----------+
           |
-         lan
+         LAN2
           |
       +--------+
       | Switch |   - Ubiquity Unify Managed Switch
@@ -69,14 +69,15 @@ There are a lot of useful posts out there, this one is a composition of those ar
 ## Steps
 
 ### 1. Setup basic Internet
-1. In the **Unifi Controller** -> Devices -> USG
-2. In tab: Information copy the devices MAC address (you'll need it in step 5).
-3. Type:  `pppoe`
-4. Check the checkbox `VLAN`, enter the value `6`
-5. Set the username to: Past the MAC address AND replace the semicolons (":") with dashes ("-") AND postfix it with `@internet`. The format should look like: `xx-xx-xx-xx-xx-xx@internet`.
-6. Set the password to: `kpn`.
-7. Click: *Queue change*.
-8. Go to: *Device Management* and click *Force provision*
+1. Connect your PC to LAN1 pott (eth1) on the USG‑PRO‑4.
+2. Browse to 192.168.1.1.
+3. Login with username: `ubnt` and password: `ubnt`
+4. Click on configuration
+5. Select by connection TypeType: `pppoe`
+6. Set the username to: Past the MAC address AND replace the semicolons (":") with dashes ("-") AND postfix it with `@internet`. The format should look like: `xx-xx-xx-xx-xx-xx@internet`.
+7. Set the password to: `kpn`
+8. Check the checkbox `VLAN`, enter the value `6`
+7. Click: *Apply changse*.
 
 All done, you should now have Internet in your LAN.
 
