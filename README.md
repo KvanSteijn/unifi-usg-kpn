@@ -24,9 +24,9 @@ There are a lot of useful posts out there, this one is a composition of those ar
       vlan6 - internet
       vlan7 - voip (not used in this setup)
           |
-       +-----+
-       | USG |   - Ubiquity Unifi Security Gateway
-       +-----+
+     +-----------+
+     | USG‑PRO‑4 |   - Ubiquity Unifi Security Gateway Pro 4
+     +-----------+
           |
          lan
           |
@@ -38,34 +38,33 @@ There are a lot of useful posts out there, this one is a composition of those ar
        |  |                                |
        |  +-----------------+              |
        |                    |              |
-+--------------+       +---------+      +-----+
-| IPTV Decoder |       | Wifi AP |      | NAS |
-+--------------+       +---------+      +-----+
-  - KPN IPTV                              - Synology diskstation
-  - Netflix                               - Docker
-                                          - Unifi controller
++--------------+       +---------+      +-------+
+| IPTV Decoder |       | Wifi AP |      | Other |
++--------------+       +---------+      +-------+
+  - KPN IPTV
+  - Netflix
 ```
 
 ## Hardware
 * [Ubiquity Unifi Security Gateway](https://www.ubnt.com/unifi-routing/usg/) - Enterprise Gateway Router with Gigabit Ethernet - model: USG
 * [Ubiquity Unifi AP AC LR](https://www.ubnt.com/unifi/unifi-ap-ac-lr/) - 802.11ac Long Range Access Point - model: UAP‑AC‑LR.
 * [Ubiquity Unifi AP AC Pro](https://www.ubnt.com/unifi/unifi-ap-ac-pro/) - 802.11ac PRO Access Point - model: UAP‑AC‑PRO.y Managed Gigabit Switch - model: US‑8‑60W
-* [Ubiquity Unifi Controller](https://www.ubnt.com/software/) - Centralized management software for the Ubiquity Unifi family (running inside a docker container on a Synology Diskstation).
+* [Ubiquity Unifi Controller](https://www.ubnt.com/software/) - Centralized management software for the Ubiquity Unifi family (running on a virtual machine in the cloud).
 
 ## Further notes:
 * Voip services are excluded in this configuration (I'm not using them). Read the links below if you're interested in setting this up. Basically you'll bridge VLAN 7 to USG LAN2 and connect the Experiabox.
-* The Ubiquity Unifi controller is running in a Docker container on a Synology NAS (having a static IP address).
-* Configuration is focused on IPV4. I don't bother setting up and securing IPV6.
+* The Ubiquity Unifi controller is running on a virtual machine with static IP addres by cloud operator TransIP.
+* Configuration is focused on IPV4.
 * This configuration guide references commands to be issued on multiple devices **USG** or the **Unifi Controller**. Always make sure you're connected to the right device.
 * When connected to **USG**, you're connected to EdgeOS. Double pressing *tab* will give you an overview of commands.
 
 ## Prerequisites
 1. To support routed IPTV make sure you're using a (managed) switch supporting IGMP snooping
-2. Have a Ubiquity Unifi Controller running. If not, see: https://miketabor.com/running-ubiquiti-unifi-controller-in-docker-on-synology-nas/
-3. Adopt, provision and upgrade your USG.
+2. Have a Ubiquity Unifi Controller running.
 4. Configure you're internal LAN setup (IP range(s) / DHCP / AP's / etc.).
 5. Connect the USG WAN port (eth0) to the FTTP NTU of KPN.
 6. Connect the USG LAN1 port (eth1) to the Managed Switch
+7. Connect the USG LAN2/WAN2 port (eth3) to the Managed Switch
 
 ## Steps
 
