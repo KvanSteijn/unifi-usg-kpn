@@ -99,12 +99,14 @@ The routed IP network sometimes changes, therefore the next-hop settings for rou
 2. Go to `Local network`.
 3. CLick on the button `Create new Local Network` and use the `Advanced Network` step.
 4. Fill in `network name` your own network name
-5. Fill in `Gateway IP / Subnet` this IP range: `192.168.100.1/24`. The DHCP should be updated automatic with correct range (start: `192.168.100.6`, end: `192.168.100.254`).
-6. Click on `Apply changes`.
-7. Go to `Devices` in **Unifi Controller** and click on your USG‑PRO‑4 model.
-8. Go to `Ports` and active edit mode by clicking on the `Configure Interfaces` button. 
-9. Select by `Port WAN2 Network` for new network lan.
-10. Click on the button `Apply`.
+5. Select `LAN3` by `Network Group`.
+6. Activate `Enable IGMP Snooping`.
+7. Fill in `Gateway IP / Subnet` this IP range: `192.168.100.1/24`. The DHCP should be updated automatic with correct range (start: `192.168.100.6`, end: `192.168.100.254`).
+8. Click on `Apply changes`.
+9. Go to `Devices` in **Unifi Controller** and click on your USG‑PRO‑4 model.
+10. Go to `Ports` and active edit mode by clicking on the `Configure Interfaces` button. 
+11. Select by `Port WAN2 Network` for new network lan.
+12. Click on the button `Apply`.
 
 ### 6. Create `config.gateway.json` file  
 The USG runs linux (EdgeOS version) as it's OS. The advanced settings need you to use the extension hooks Ubiquity build into the USG. See https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json for more information.
