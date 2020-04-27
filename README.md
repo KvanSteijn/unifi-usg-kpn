@@ -63,8 +63,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 2. Have a Ubiquity Unifi Controller running.
 4. Configure you're internal LAN setup (IP range(s) / DHCP / AP's / etc.).
 5. Connect the USG WAN port (eth0) to the FTTP NTU of KPN.
-6. Connect the USG LAN1 port (eth1) to the Managed Switch
-7. Connect the USG LAN2/WAN2 port (eth3) to the Managed Switch
+6. Connect the USG LAN1 port (eth1) to the Managed Switch.
 
 ## Steps
 
@@ -72,53 +71,21 @@ There are a lot of useful posts out there, this one is a composition of those ar
 1. Connect your PC to LAN1 pott (eth1) on the USG‑PRO‑4.
 2. Browse to 192.168.1.1.
 3. Login with username: `ubnt` and password: `ubnt`
-4. Click on configuration
+4. Click on `configuration`
 5. Select by connection TypeType: `pppoe`
 6. Set the username to: Past the MAC address AND replace the semicolons (":") with dashes ("-") AND postfix it with `@internet`. The format should look like: `xx-xx-xx-xx-xx-xx@internet`.
 7. Set the password to: `kpn`
 8. Check the checkbox `VLAN`, enter the value `6`
-7. Click: *Apply changse*.
+7. Click on the button: `Apply changes`.
 
 All done, you should now have Internet in your LAN.
 
-### 2. Create `config.gateway.json` file  
-The USG runs linux (EdgeOS version) as it's OS. The advanced settings need you to use the extension hooks Ubiquity build into the USG. See https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json for more information.
+### 2. Adopt Ubiquity Unifi Security Gateway Pro 4
+1. `SSH` into the **USG**
+2. Run this command with your **own** Unifi Controller IP address: ``set-inform http://{IP_ADRESS}:8080/inform`
+3. Adopt Unifi Security Gateway Pro 4 in your controller.
 
-_At the time of writing the article is not 100% correct, the configuration in the custom configuration file is merged with the system configuration in the way that non-existent settings are added and existing items are overwritten by the settings in the file. Take good care not to mix and overwrite critical security settings with the config file. For this reason the config file provided in this repo is a minimum set of settings, all other settings are preserved (and hence future changes in upgrades as well)._
-
-Notes:
-* Basically you'll need to create and upload an JSON file named: `config.gateway.json` into a specific folder of the Unifi Controller filesystem and then force the provisioning from the controller to the USG.
-* The custom configuration file references firewall rules that are not within the configuration file, those are registered and provided by Ubiquity in the standard configuration of the USG.
-
-Let's get started.
-
-Pull the `config.gateway.json`  from the repo and change the following:
-1. Replace the MAC address placeholder `xx-xx-xx-xx-xx-xx` with the real MAC address of the USG (see *Setup basic Internet, step 2*).
-2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.100.1/24`) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
-3. Save the file (using UNIX file format)
-4. (optional) Use an online JSON validator to check of you have created / not corrupted the JSON file.
-
-### 3. Publish and provision the configuration
-In order for the file to by applied to the USG you need to upload it to the **Unifi Controller** from there you can provision it to the USG.
-
-There are several ways to publish the file to the Unifi controller.
-
-1. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/default` and `push config.gateway.json`
-
-2. In (my) case the Controller is running in a **Docker container (without SSH deamon)** with a volume mapping. Connect with SFTP *to the docker host* and `/volume1/docker/unifi/data/sites/default` and `push config.gateway.json`.
-
-The location of the file should be `data/sites/default`. Where `default` is the name / identifier of the site in which the USG is located. For finding the correct location see: https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json.
-
-After completing these steps continue provision the configuration to the USG.
-
-1. In the **Unifi Controller** -> Devices -> USG
-2. Go to: *Device Management* and click *Force provision*
-
-The USG status changes to `provisioning` and after a few minutes the status should return back to `connected`.
-
-In case the USG remains in the status `provisioning` please consult the section "Troubleshooting" below.
-
-### 4. Auto update IPTV route automatically
+### 3. Auto update IPTV route automatically
 The routed IP network sometimes changes, therefore the next-hop settings for routing should periodically change
 
 1. Pull the `update_iptv_route.sh` from the repo
@@ -129,7 +96,56 @@ The routed IP network sometimes changes, therefore the next-hop settings for rou
 6. Make the file executable `chmod +x /config/scripts/post-config.d/update_iptv_route.sh`
 7. Execute the script ./update_iptv_route.sh
 
-### 5. Celebrate!.
+### 4. Create new LAN network in Unifi Controller
+1. Go to `Settings`.
+2. Go to `Local network`.
+3. CLick on the button `Create new Local Network` and use the `Advanced Network` step.
+4. Fill in `network name` your own network name
+5. Fill in `Gateway IP / Subnet` this IP range: `192.168.100.1/24`. The DHCP should be updated automatic with correct range (start: `192.168.100.6`, end: `192.168.100.254`).
+6. Click on `Apply changes`.
+7. Go to `Devices` in **Unifi Controller** and click on your USG‑PRO‑4 model.
+8. Go to `Ports` and active edit mode by clicking on the `Configure Interfaces` button. 
+9. Select by `Port WAN2 Network` for new network lan.
+10. Click on the button `Apply`.
+
+### 6. Create `config.gateway.json` file  
+The USG runs linux (EdgeOS version) as it's OS. The advanced settings need you to use the extension hooks Ubiquity build into the USG. See https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json for more information.
+
+_At the time of writing the article is not 100% correct, the configuration in the custom configuration file is merged with the system configuration in the way that non-existent settings are added and existing items are overwritten by the settings in the file. Take good care not to mix and overwrite critical security settings with the config file. For this reason the config file provided in this repo is a minimum set of settings, all other settings are preserved (and hence future changes in upgrades as well)._
+
+Notes:
+* Basically you'll need to create and upload an JSON file named: `config.gateway.json` into a specific folder of the Unifi Controller filesystem and then force the provisioning from the controller to the USG.
+* The custom configuration file references firewall rules that are not within the configuration file, those are registered and provided by Ubiquity in the standard configuration of the USG.
+
+Let's get started.
+
+Pull the `config.gateway.json` from the repo and change the following:
+1. Replace the MAC address placeholder `xx-xx-xx-xx-xx-xx` with the real MAC address of the USG (see *Setup basic Internet, step 6*).
+2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.100.1/24` on this tutorial) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
+3. Save the file (using UNIX file format)
+4. (optional) Use an online JSON validator to check of you have created / not corrupted the JSON file.
+
+### 7. Publish and provision the configuration
+In order for the file to by applied to the USG you need to upload it to the **Unifi Controller** from there you can provision it to the USG.
+
+There are several ways to publish the file to the Unifi controller.
+
+For finding the correct location see: https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json.
+
+1. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.gateway.json`
+
+After completing these steps continue provision the configuration to the USG.
+
+1. In the **Unifi Controller** -> Devices -> USG
+2. Go to: *Device Management* and click *Force provision*
+
+The USG status changes to `provisioning` and after a few minutes the status should return back to `connected`.
+In case the USG remains in the status `provisioning` please consult the section "Troubleshooting" below.
+
+3. When you hacve `conncted` status you can disconnect the USG LAN1 port (eth1) with the Managed Switch.
+3. Connect the USG LAN2/WAN2 port (eth3) to the Managed Switch
+
+### 8. Celebrate!.
 Wait for it.... you're done. The Internet and IPTV should be working. Test you're IPTV by rebooting the decoders and see if they come back online. If not... read below.
 
 In case the USG or IPTV doesn't work, please consult the section "Troubleshooting" below.
