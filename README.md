@@ -10,7 +10,6 @@ There are a lot of useful posts out there, this one is a composition of those ar
 * **Simplicity**: I'd like my network to be as simple as possible, in hardware, software and configuration.
 * **Forward compatibility**: Keep as much configuration in the USG configured as per controller to increase and maintain forward compatibility with upgrades. The USG comes with a default firewall configuration and routing options that allow you for guest network isolation etc. I'd like to adopt future advancements.
 * **Automated updates**: Automate the updates of the routing as the IPTV network changes.
-* **Custom IP Range**: Keep the internal networking ranges as they were (192.168.100.1/24).
 
 ## Global design after the installation
 ```
@@ -52,21 +51,22 @@ There are a lot of useful posts out there, this one is a composition of those ar
 ## Further notes:
 * Voip services are excluded in this configuration (I'm not using them). Read the links below if you're interested in setting this up. Basically you'll bridge VLAN 7 to USG LAN2 and connect the Experiabox.
 * The Ubiquity Unifi controller is running on a virtual machine with static IP addres by cloud operator TransIP.
-* Configuration is focused on IPV4.
+* Configuration is **focused** on IPV4.
 * This configuration guide references commands to be issued on multiple devices **USG** or the **Unifi Controller**. Always make sure you're connected to the right device.
 * When connected to **USG**, you're connected to EdgeOS. Double pressing *tab* will give you an overview of commands.
 
 ## Prerequisites
 1. To support routed IPTV make sure you're using a (managed) switch supporting IGMP snooping
-2. Have a Ubiquity Unifi Controller running.
+2. Have a Ubiquity Unifi Controller running **internaly** (Controller in the "cloud" can break USG‑PRO‑4 configuration).
 4. Configure you're internal LAN setup (IP range(s) / DHCP / AP's / etc.).
 5. Connect the USG WAN port (eth0) to the FTTP NTU of KPN.
 6. Connect the USG LAN1 port (eth1) to the Managed Switch.
+7. Connect the USG LAN3/WAN2 port (eth3) to the Managed Switch.
 
 ## Steps
 
 ### 1. Setup basic Internet
-1. Connect your PC to LAN1 pott (eth1) on the USG‑PRO‑4.
+1. Connect your PC to LAN1 port (eth1) on the USG‑PRO‑4.
 2. Browse to 192.168.1.1.
 3. Login with username: `ubnt` and password: `ubnt`
 4. Click on `configuration`
@@ -90,22 +90,16 @@ The routed IP network sometimes changes, therefore the next-hop settings for rou
 
 ### 3. Adopt Ubiquity Unifi Security Gateway Pro 4
 1. `SSH` into the **USG**
-2. Run this command with your **own** Unifi Controller IP address: `set-inform http://{IP_ADRESS}:8080/inform`
+2. Run this command with your **own** local Unifi Controller IP address: `set-inform http://{IP_ADRESS}:8080/inform`
 3. Adopt Unifi Security Gateway Pro 4 in your controller.
 
-### 4. Create new LAN network in Unifi Controller
-1. Go to `Settings`.
-2. Go to `Local network`.
-3. CLick on the button `Create new Local Network` and use the `Advanced Network` step.
-4. Fill in `network name` your own network name
-5. Select `LAN3` by `Network Group`.
-6. Activate `Enable IGMP Snooping`.
-7. Fill in `Gateway IP / Subnet` this IP range: `192.168.100.1/24`. The DHCP should be updated automatic with correct range (start: `192.168.100.6`, end: `192.168.100.254`).
-8. Click on `Apply changes`.
-9. Go to `Devices` in **Unifi Controller** and click on your USG‑PRO‑4 model.
-10. Go to `Ports` and active edit mode by clicking on the `Configure Interfaces` button. 
-11. Select by `Port WAN2 Network` for new network lan.
+### 4. Change port configuration on Ubiquity Unifi Security Gateway Pro 4
+1. Go to `Devices` in **Unifi Controller** and click on your USG‑PRO‑4 model.
+2. Go to `Ports` and active edit mode by clicking on the `Configure Interfaces` button. 
+3. Disable all `LAN` ports.
+4. Select by `Port WAN2 Network` for current LAN.
 12. Click on the button `Apply`.
+13. When you have `connected` status on your controller, you can disconnect the USG LAN1 port (eth1) with the Managed Switch.
 
 ### 6. Create `config.gateway.json` file  
 The USG runs linux (EdgeOS version) as it's OS. The advanced settings need you to use the extension hooks Ubiquity build into the USG. See https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json for more information.
@@ -120,7 +114,7 @@ Let's get started.
 
 Pull the `config.gateway.json` from the repo and change the following:
 1. Replace the MAC address placeholder `xx-xx-xx-xx-xx-xx` with the real MAC address of the USG (see *Setup basic Internet, step 6*).
-2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.100.1/24` on this tutorial) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
+2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.1.1/24` on this tutorial) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
 3. Save the file (using UNIX file format)
 4. (optional) Use an online JSON validator to check of you have created / not corrupted the JSON file.
 
@@ -140,9 +134,6 @@ After completing these steps continue provision the configuration to the USG.
 
 The USG status changes to `provisioning` and after a few minutes the status should return back to `connected`.
 In case the USG remains in the status `provisioning` please consult the section "Troubleshooting" below.
-
-3. When you hacve `conncted` status you can disconnect the USG LAN1 port (eth1) with the Managed Switch.
-3. Connect the USG LAN2/WAN2 port (eth3) to the Managed Switch
 
 ### 8. Celebrate!.
 Wait for it.... you're done. The Internet and IPTV should be working. Test you're IPTV by rebooting the decoders and see if they come back online. If not... read below.
