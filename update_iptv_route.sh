@@ -62,9 +62,11 @@ else
             telegram_send "USG-PRO: IGMP proxy is started"
         else
             telegram_send "USG-PRO: Failed to start IGMP proxy"
+            r_status="0"
         fi
     else
         telegram_send "USG-PRO: Failed to start IGMP proxy"
+        r_status="0"
     fi
 fi
 
