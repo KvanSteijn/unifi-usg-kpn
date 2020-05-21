@@ -109,7 +109,7 @@ Notes:
 * Basically you'll need to create and upload an JSON file named: `config.gateway.json` into a specific folder of the Unifi Controller filesystem and then force the provisioning from the controller to the USG.
 * The custom configuration file references firewall rules that are not within the configuration file, those are registered and provided by Ubiquity in the standard configuration of the USG.
 
-For finding the correct location see: https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json.
+For finding the correct location to place `config.gateway.json` on the USG, see: https://help.ubnt.com/hc/en-us/articles/215458888-UniFi-How-to-further-customize-USG-configuration-with-config-gateway-json.
 
 Let's get started.
 
@@ -128,13 +128,13 @@ Follow the next steps for finalized the configuration.
 2. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.properties`
 
 ### 8. Provision the configuration
-1. In the **Unifi Controller** -> Devices -> USG
-2. Go to: *Device Management* and click *Force provision*
+1. In the **Unifi Controller** -> Devices -> USG.
+2. Go to: *Device Management* and click `Force provision`.
 
 The USG status changes to `provisioning` and after a few minutes the status should return back to `connected`.
 In case the USG remains in the status `provisioning` please consult the section "Troubleshooting" below.
 
-3. *Force provision* for other devices: *Device Management* and click *Force provision* for all devices.
+3. `Force provision` for other devices: *Device Management* and click *Force provision* for all devices.
 
 ### 9. Celebrate!.
 Wait for it.... you're done. The Internet and IPTV should be working. Test you're IPTV by rebooting the decoders and see if they come back online. If not... read below.
