@@ -10,6 +10,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 * **Simplicity**: I'd like my network to be as simple as possible, in hardware, software and configuration.
 * **Forward compatibility**: Keep as much configuration in the USG configured as per controller to increase and maintain forward compatibility with upgrades. The USG comes with a default firewall configuration and routing options that allow you for guest network isolation etc. I'd like to adopt future advancements.
 * **Automated updates**: Automate the updates of the routing as the IPTV network changes.
+* **Telegram integration**: Send automatic messages when something is changed on your USG.
 
 ## Global design after the installation
 ```
@@ -67,29 +68,29 @@ There are a lot of useful posts out there, this one is a composition of those ar
 ### 1. Setup basic Internet
 1. Connect your PC to LAN1 port (eth1) on the USG‑PRO‑4.
 2. Browse to 192.168.1.1.
-3. Login with username: `ubnt` and password: `ubnt`
-4. Click on `configuration`
-5. Select by connection TypeType: `pppoe`
+3. Login with username: `ubnt` and password: `ubnt`.
+4. Click on `configuration`.
+5. Select by connection TypeType: `pppoe`.
 6. Set the username to: Past the MAC address AND replace the semicolons (":") with dashes ("-") AND postfix it with `@internet`. The format should look like: `xx-xx-xx-xx-xx-xx@internet`.
-7. Set the password to: `kpn`
-8. Check the checkbox `VLAN`, enter the value `6`
+7. Set the password to: `kpn`.
+8. Check the checkbox `VLAN`, enter the value `6`.
 7. Click on the button: `Apply changes`.
 
 All done, you should now have Internet in your LAN.
 
 ### 2. Auto update IPTV route automatically
-The routed IP network sometimes changes, therefore the next-hop settings for routing should periodically change
+The routed IP network sometimes changes, therefore the next-hop settings for routing should periodically change.
 
-1. Pull the `update_iptv_route.sh` from the repo
-2. `SFTP` into the **USG**
-3. Push the update script: `push update_iptv_route.sh`
-4. `SSH` into the **USG**
-5. Move the file: `mv update_iptv_route.sh /config/scripts/post-config.d/`
-6. Make the file executable `chmod +x /config/scripts/post-config.d/update_iptv_route.sh`
+1. Pull the `update_iptv_route.sh` from the repo.
+2. `SFTP` into the **USG**.
+3. Push the update script: `push update_iptv_route.sh`.
+4. `SSH` into the **USG**.
+5. Move the file: `mv update_iptv_route.sh /config/scripts/post-config.d/`.
+6. Make the file executable `chmod +x /config/scripts/post-config.d/update_iptv_route.sh`.
 
 ### 3. Adopt Ubiquity Unifi Security Gateway Pro 4
-1. `SSH` into the **USG**
-2. Run this command with your **own** local Unifi Controller IP address: `set-inform http://{IP_ADRESS}:8080/inform`
+1. `SSH` into the **USG**.
+2. Run this command with your **own** local Unifi Controller IP address: `set-inform http://{IP_ADRESS}:8080/inform`.
 3. Adopt Unifi Security Gateway Pro 4 in your controller.
 
 ### 4. Change port configuration on Ubiquity Unifi Security Gateway Pro 4
@@ -116,16 +117,20 @@ Let's get started.
 Pull the `config.gateway.json` from the repo and change the following:
 1. Replace the MAC address placeholder `xx-xx-xx-xx-xx-xx` with the real MAC address of the USG (see *Setup basic Internet, step 6*).
 2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.1.1/24` on this tutorial) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
-3. Save the file (using UNIX file format)
+3. Save the file (using UNIX file format).
 4. (optional) Use an online JSON validator to check of you have created / not corrupted the JSON file.
-6. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.gateway.json`
+5. `SFTP` into the **USG**.
+6. Go to correct location: `cd /usr/lib/unifi/data/sites/{location}`.
+6. Push the config file: `config.gateway.json`.
 
 ### 7. Create `config.properties` file  
 This file is extends on `config.gateway.json` and need to place in on the same location as `config.gateway.json`.
 Follow the next steps for finalized the configuration. 
 
 1. Pull the `config.properties` from the repo.
-2. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.properties`
+2. `SFTP` into the **USG**.
+3. Go to correct location: `cd /usr/lib/unifi/data/sites/{location}`.
+4. Push the config file: `config.properties`.
 
 ### 8. Provision the configuration
 1. In the **Unifi Controller** -> Devices -> USG.
