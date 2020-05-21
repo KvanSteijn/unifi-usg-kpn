@@ -46,11 +46,10 @@ There are a lot of useful posts out there, this one is a composition of those ar
 
 ## Hardware
 * [Ubiquity Unifi Security Gateway](https://www.ui.com/unifi-routing/unifi-security-gateway-pro-4/) - Enterprise Gateway Router with Gigabit Ethernet - model: USG‑PRO‑4
-* [Ubiquity Unifi Controller](https://www.ubnt.com/software/) - Centralized management software for the Ubiquity Unifi family (running on a virtual machine in the cloud).
+* [Ubiquity Unifi Controller](https://www.ubnt.com/software/) - Centralized management software for the Ubiquity Unifi family.
 
 ## Further notes:
 * Voip services are excluded in this configuration (I'm not using them). Read the links below if you're interested in setting this up. Basically you'll bridge VLAN 7 to USG LAN2 and connect the Experiabox.
-* The Ubiquity Unifi controller is running on a virtual machine with static IP addres by cloud operator TransIP.
 * Configuration is **focused** on IPV4.
 * This configuration guide references commands to be issued on multiple devices **USG** or the **Unifi Controller**. Always make sure you're connected to the right device.
 * When connected to **USG**, you're connected to EdgeOS. Double pressing *tab* will give you an overview of commands.
@@ -117,8 +116,16 @@ Pull the `config.gateway.json` from the repo and change the following:
 2. Adjust the IP ranges / DHCP ranges to you're liking (currently `192.168.1.1/24` on this tutorial) but they can be any range as long as they do not overlap public IP spaces (duh) and the IPTV ranges KPN uses.
 3. Save the file (using UNIX file format)
 4. (optional) Use an online JSON validator to check of you have created / not corrupted the JSON file.
+6. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.gateway.json`
 
-### 7. Publish and provision the configuration
+### 7. Create `config.properties` file  
+This file is extends on `config.gateway.json` and need to place in on the same location as `config.gateway.json`.
+Follow the next steps for finalized the configuration. 
+
+1. Pull the `config.properties` from the repo.
+2. In case the Controller has an **SSH deamon running**. Connect with `SFTP` and `cd /usr/lib/unifi/data/sites/{location}` and `push config.properties`
+
+### 8. Publish and provision the configuration
 In order for the file to by applied to the USG you need to upload it to the **Unifi Controller** from there you can provision it to the USG.
 
 There are several ways to publish the file to the Unifi controller.
@@ -135,7 +142,7 @@ After completing these steps continue provision the configuration to the USG.
 The USG status changes to `provisioning` and after a few minutes the status should return back to `connected`.
 In case the USG remains in the status `provisioning` please consult the section "Troubleshooting" below.
 
-### 8. Celebrate!.
+### 9. Celebrate!.
 Wait for it.... you're done. The Internet and IPTV should be working. Test you're IPTV by rebooting the decoders and see if they come back online. If not... read below.
 
 In case the USG or IPTV doesn't work, please consult the section "Troubleshooting" below.
