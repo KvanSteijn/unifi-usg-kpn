@@ -56,7 +56,7 @@ There are a lot of useful posts out there, this one is a composition of those ar
 * When connected to **USG**, you're connected to EdgeOS. Double pressing *tab* will give you an overview of commands.
 
 ## Prerequisites
-1. To support routed IPTV make sure you're using a (managed) switch supporting IGMP snooping
+1. To support routed IPTV make sure you're using a (managed) switch supporting IGMP snooping and please enabled this option in the controller.
 2. Have a Ubiquity Unifi Controller running **internaly** (Controller in the "cloud" can break USG‑PRO‑4 configuration).
 4. Configure you're internal LAN setup (IP range(s) / DHCP / AP's / etc.).
 5. Connect the USG WAN port (eth0) to the FTTP NTU of KPN.
