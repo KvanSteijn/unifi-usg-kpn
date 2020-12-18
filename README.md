@@ -128,7 +128,7 @@ This file is extends on `config.gateway.json` and need to place in on the same l
 Follow the next steps for finalized the configuration. 
 
 1. Pull the `config.properties` from the repo.
-2. `SFTP` into the **USG**.
+2. `SFTP` into the **Unifi controller**.
 3. Go to correct location: `cd /usr/lib/unifi/data/sites/{location}`.
 4. Push the config file: `config.properties`.
 
