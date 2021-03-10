@@ -55,7 +55,7 @@ else
     telegram_send "USG-PRO: IGMP proxy is not running, try to start IGMP proxy!"
 
     # Try to restart IGMP proxy
-    /opt/vyatta/sbin/config-igmpproxy.pl --action=restart
+    sudo /opt/vyatta/sbin/config-igmpproxy.pl --action=restart
     if [ $? -eq 0 ]; then
         r_second_ps=$(ps aux | grep -v grep);
         if echo "$r_second_ps" | grep -q "igmpproxy"; then
@@ -98,6 +98,9 @@ if [[ $r_status == "1" ]]; then
             # Commit and save last changes
             commit
             save
+            
+            # Restart IGMP proxy
+            sudo /opt/vyatta/sbin/config-igmpproxy.pl --action=restart
 
             # Send message
             telegram_send "USG-PRO: Static route is changed: $r_ip"
